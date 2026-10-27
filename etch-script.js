@@ -1,18 +1,29 @@
+let isEraser = false
 const container = document.querySelector("#container")
 const body = document.querySelector("body")
+let history = []
+let length = 16
 
 const undo = document.createElement("Button")
 undo.textContent = "Undo"
 undo.addEventListener("click", () => {
-	let lastSquare = history.pop()
-	lastSquare.style.backgroundColor = "white"
+	let lastAction = history.pop()
+	if (lastAction[1] === false) {
+		lastAction[0].style.backgroundColor = "white"
+	} else {
+		lastAction[0].style.backgroundColor = "black"
+	}
  }
 )
 body.appendChild(undo)
 
+const eraser = document.createElement("Button")
+eraser.textContent = "Eraser"
+body.appendChild(eraser)
+eraser.addEventListener("click", () => {
+	isEraser = !isEraser
+})
 
-let history = []
-let length = 16
 
 const gridSize = document.querySelector("#size")
 gridSize.addEventListener("click", () => {
@@ -49,9 +60,13 @@ function createGrid() {
 		container.appendChild(square)
 		
 		square.addEventListener("click", (event) => {
-			square.style.backgroundColor = "black"
-			history.push(event.target)
-		})
+			if (isEraser === true) {
+				square.style.backgroundColor = "white"
+			} else {
+				square.style.backgroundColor = "black"
+			}
+			history.push([event.target, isEraser])
+		})	
 	}
 }
 
